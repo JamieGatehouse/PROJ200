@@ -1,0 +1,162 @@
+/*//include the header file with all definitions for the STM32f429 family
+#include <stm32f429xx.h>
+
+//declare a variable i
+unsigned int i;
+
+
+
+void LED_INIT(void)
+{
+	//Enable clock B
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+	//Set pin PB0 to output for LED1
+	GPIOB->MODER |= (0x01<<(2*0));			//ensure the first bit in the regester is one
+	GPIOB->MODER &= ~(0x02<<(2*0));			//ensure the second bit in the regester is zero
+	//Set pin PB7 to output for LED2
+	GPIOB->MODER |= (0x01<<(2*7));			//ensure the first bit in the regester is one
+	GPIOB->MODER &= ~(0x02<<(2*7));			//ensure the second bit in the regester is zero
+	//Set pin PB14 to output for LED3
+	GPIOB->MODER |= (0x01<<(2*14));			//ensure the first bit in the regester is one
+	GPIOB->MODER &= ~(0x02<<(2*14));			//ensure the second bit in the regester is zero
+	
+}
+
+
+void BTN_INIT(void)
+{
+	//Enable clock C
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
+	//set pin PC13 to input for the user button
+	GPIOC->MODER &= ~(0x03<<(2*13));			//ensure mode of PC13 is set to 00 for an input
+}
+
+void LED_ON(void)
+{
+	GPIOB->ODR |= (1<<0);			//only turn LED1 on
+	GPIOB->ODR |= (1<<7);			//only turn LED2 on
+	GPIOB->ODR |= (1<<14);			//only turn LED3 on
+}
+
+
+void LED_OFF(void)
+{
+	GPIOB->ODR &= ~(1<<0);			//only turn LED1 off
+	GPIOB->ODR &= ~(1<<7);			//only turn LED2 off
+	GPIOB->ODR &= ~(1<<14);			//only turn LED3 off
+}
+
+void LED_MODE(void)
+{
+	GPIOB->ODR |= (1<<14);			//only turn LED3 on
+	GPIOB->ODR &= ~(1<<0);			//only turn LED1 off
+	GPIOB->ODR &= ~(1<<7);			//only turn LED2 off
+}
+
+
+void delay(void)
+{
+	for(i=0; i<100000; i++);			//set variable i to 1 and loop until the value of i reaches 1 million
+}
+
+int main(void)
+{
+	LED_INIT();			//call LED_INIT function
+	BTN_INIT();
+	
+	//turn LED1 on and off forever
+	while(1)			//loop forever
+	{
+		while(GPIOC->IDR & (0x01<<13))
+		{
+			unsigned int x = 0;
+			x++;
+			delay();
+			if(x<1000000)
+			{
+				LED_ON();			//call LED_ON function
+				delay();			//call delay function
+			}
+			else
+			{
+				LED_MODE();
+				delay();
+			}
+		}
+	}
+}
+
+*/
+
+#include <stm32f429xx.h>
+#include "Switch.h"
+
+
+
+void delay_ms(int ms)
+{
+    for(i = 0; i < (ms * 1000); i++);
+}
+
+void debounce(void)
+{
+	for(x=0; x<10000; x++);
+}
+
+void GPIO_INIT(void)
+{
+	enable_clockB();
+	enable_clockC();
+	
+	read_userBTN()
+	
+	set_LED1();
+	clr_LED1();
+	
+	set_LED2();
+	clr_LED2();
+}
+
+int main(void)
+{
+    GPIO_INIT();
+
+    while(1)
+    {
+        // Button pressed (active low)
+        if((GPIOC->IDR & (1UL << 13)))
+        {
+            if(!button_was_pressed)
+            {
+                press_start = tick;
+                button_was_pressed = 1;
+            }
+            tick++;
+            delay_ms(1);  // 1ms delay
+        }
+        // Button released
+        else if(button_was_pressed)
+        {
+          debounce();  
+					press_duration = tick - press_start;
+            
+            
+					// Short press < 1 second (1000ms)
+					if(press_duration < 1000)
+					{
+						LED1_ON();
+						LED2_OFF();
+					}
+					// Long press > 2 seconds (2000ms)
+					else if(press_duration > 2000)
+					{
+						LED1_OFF();
+						LED2_ON();
+					}
+					
+					// Reset for next press
+					tick = 0;
+					button_was_pressed = 0;
+        }
+    }
+}
