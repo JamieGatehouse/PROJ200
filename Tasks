@@ -1,4 +1,13 @@
 Hardware
+- test functionality + get images for LEDs and photodiode in action (3)
+- get results from LED current vs photodiode output (2)
+- feed circuit sine + complex wave to simulate input from photodiode + get images of wave outputs (2)
+- PCB frequency response meaured vs simulated and explain why they are different + show images (2)
+- measure PCB DC offset and compare to calculated (1)
+
+- power supply test? (1)
+- capture signals from fingers + get images of results (2)
+- capture signals at test points and compare to simulated, get images of results (2)
 
 
 
