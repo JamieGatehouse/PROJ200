@@ -14,3 +14,22 @@ Hardware
 
 
 Software
+- demonstrate correct sample rate on oscilloscope, get image of result (2)
+- sample consistantly using interupts (4)
+- LED current control using DAC to turn on/brightness (2)
+- ADC data correct (3v,1.5v,0v) (2)
+- Varification and validation (see slide 5 on assesment powerpoint) (2)
+
+- well structered, commented code with logical functions (5)
+- timer calculations for PSC and ARR to capture waveforms using ADC (2)
+- display and validate ADC data (2)
+- store in circular buffer (2)
+- event timing/CPU load (2)
+
+- accurite peak detection or level crossing (2)
+- noise rejection at false peaks (2)
+- time distance between peaks (2)
+- averaging sveral readings (2)
+- measure accurite BPM (1)
+- buzzer beeps on each peak (1)
+
