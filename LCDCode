@@ -51,8 +51,9 @@ unsigned char read_LCD_busy_flag(void);
 // turn on the led display
 void initLCD(void);
 
-#endif
+void scrollTextA(const char *message);
 
+#endif
 
 
 
@@ -187,6 +188,63 @@ void initLCD(void)
 
 
 
+void scrollTextA(const char *message) {
+    unsigned char startPosition = 0;
+    unsigned char len = 0;
+	
+	
+
+    // Manually calculate the length of the string
+    while (message[len] != '\0') {
+        len++;
+    }
+
+    unsigned char displayPosition = 0;
+		
+	
+
+    // Loop through the message and display one part at a time
+    while (startPosition < len) {
+        // Clear the screen (optional, you can keep the previous part visible)
+      //cmdLCD(LCD_LINE2);  
+			cmdLCD(0x01); // Clear screen
+        lcd_delayus(2000); // Delay for clearing
+			cmdLCD(LCD_LINE1);
+			putLCD('H');
+			putLCD('E');
+			putLCD('A');
+			putLCD('R');
+			putLCD('T');
+			putLCD('R');
+			putLCD('A');
+			putLCD('T');
+			putLCD('E');
+			putLCD(':');
+			putLCD(' ');
+			putLCD('6');
+			putLCD('0');
+			putLCD('B');
+			putLCD('P');
+			putLCD('M');
+			
+			cmdLCD(LCD_LINE2);
+
+        // Print the portion of the message that fits in the LCD screen (16 characters max)
+        for (displayPosition = startPosition; displayPosition < startPosition + 16 && displayPosition < len; displayPosition++) {
+            putLCD(message[displayPosition]);
+        }
+
+        // Delay to show the message for a while
+        lcd_delayus(50000);
+
+        // Scroll to the next part of the message
+        startPosition++;
+
+        // Shift the text left to display the next character
+        cmdLCD(0x18);  // Shift display left (move all characters one space to the left)
+        
+    }
+}
 
 
 
@@ -211,29 +269,17 @@ void initLCD(void)
 //*************************************************main file*********************************************
 #include "lcd.h"
 
-int main(void)
-{
-	initLCD();
+int main(void) {
+    // Initialize the system and LCD
+    initLCD();
 	
-	// Select LINE1 and put A
-	cmdLCD(LCD_LINE1);
-	putLCD('A');
-	putLCD('B');
-	
-	cmdLCD(LCD_LINE2);
-	putLCD('A');
-  putLCD('B');
-	
-	lcd_delayus(1000);
-	
-	// reset cursor on line 1
-	cmdLCD(LCD_LINE1);
-	putLCD(' ');
-	
-	// reset cursor on line 2
-	cmdLCD(LCD_LINE2);
-	putLCD(' ');
-	
-	while(1);
+		
+  
+  while(1){  
+	// Scroll a message across the second line of the screen
+	const char *message = "MODE: A:HEARTRATE B:OXIMETER C:TEMPERATURE";
+    scrollTextA(message);
+	}
+    
 }
 
