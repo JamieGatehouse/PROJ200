@@ -33,3 +33,13 @@ Software
 - measure accurite BPM (1)
 - buzzer beeps on each peak (1)
 
+- time calculations for PSC and ARR dispalyed on UART and LCD (2)
+- dispaly average heartrate over 15 sec on LCD (2)
+- display average oxygen level on LCD (3)
+- SPI comms - temp + humidity (2)
+- I2C comms - movement suspends readings (2)
+- display debug data on UART - samples (max, min) (2)
+- graphics on UART/LEDs (2)
+
+
+- 30% for Results and Management as seen on powerpoint
