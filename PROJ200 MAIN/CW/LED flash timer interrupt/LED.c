@@ -5,7 +5,7 @@
 // GPIO Initialization
 void LED_Init(void) {
     // Enable GPIO clocks
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOEEN;
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOEEN | RCC_AHB1ENR_GPIODEN;
 
     // Configure Red (PB14), BLue (PB7), and Green (PB0) LEDs
      clr_GPIOB();
@@ -13,6 +13,11 @@ void LED_Init(void) {
 	   GPIOB->MODER|=(1u<<(2*0));
      GPIOB->OTYPER &= ~(0x8001 << 0); // Push-pull output for PB0, PB7, PB14
      GPIOB->OSPEEDR |= (0x3F << (0 * 2)) | (0x3 << (14 * 2)); // High speed
+	
+	   //finger led
+	   GPIOD->MODER|=(1u<<(2*13))
+	   GPIOD->OTYPER &= ~(0x8001 << 0); // Push-pull output for PB0, PB7, PB14
+     GPIOD->OSPEEDR |= (0x3F << (13 * 2)); // High speed
 
 
 	
@@ -54,6 +59,6 @@ void TIM2_IRQHandler(void)			//TIMER 2 INTERRUPT SERVICE ROUTINE
 
 void Toggle_LED1 (void) {
 	
-	GPIOB->ODR^=(1u<<14);
+	GPIOD->ODR^=(1u<<13);
 	 
 }

@@ -1116,12 +1116,12 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      2908         32         43          0        201      13392   main.o
+      2908         32         43          0        201      13404   main.o
         64         26        428          0       1536        932   startup_stm32f429xx.o
        412          0         16          4          0       2828   system_stm32f4xx.o
 
     ----------------------------------------------------------------------
-      3414         58        520          4       1744      17152   Object Totals
+      3414         58        520          4       1744      17164   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         30          0          1          0          7          0   (incl. Padding)
 
@@ -1192,8 +1192,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8404        502        816          4       1840      19064   Grand Totals
-      8404        502        816          4       1840      19064   ELF Image Totals
+      8404        502        816          4       1840      19076   Grand Totals
+      8404        502        816          4       1840      19076   ELF Image Totals
       8404        502        816          4          0          0   ROM Totals
 
 ==============================================================================
