@@ -27,15 +27,6 @@ Project File Date:  03/11/2025
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\sampa\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-main.c(4): warning: In file included from...
-.\LED.c(19): error: called object type 'unsigned int' is not a function or function pointer
-   18 |            GPIOD->MODER|=(1u<<(2*13))
-      |                          ~~~~~~~~~~~~
-   19 |            GPIOD->OTYPER &= ~(0x8001 << 0); // Push-pull output for PB0, PB7, PB14
-      |            ^
-C:/Users/sampa/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include\stm32f429xx.h(1251): note: expanded from macro 'GPIOD'
- 1251 | #define GPIOD               ((GPIO_TypeDef *) GPIOD_BASE)
-      |                             ^
 main.c(5): warning: In file included from...
 .\USART.c(80): warning: equality comparison result unused [-Wunused-comparison]
    80 |                 temp == ((SystemCoreClock/4)<<5 / (16 * 230400));
@@ -49,6 +40,9 @@ main.c(8): warning: In file included from...
   136 |                 while (!(I2C1->SR1 & (1<<6)));  // wait for RxNE to set
       |                                              ^
 .\ISC.c(136): note: put the semicolon on a separate line to silence this warning
+main.c(21): error: call to undeclared function 'Init_Timer2'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   21 |     Init_Timer2();      //RED LED TIMER
+      |     ^
 2 warnings and 1 error generated.
 compiling main.c...
 ".\Objects\LED flash timer.axf" - 1 Error(s), 2 Warning(s).
@@ -78,12 +72,12 @@ Package Vendor: Keil
 
    * Component: Keil::Device:Startup@2.6.3
       Source file:   MDK/Device/Source/ARM/STM32F42xxx_43xxx_OPT.s
-      Source file:   Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f429xx.s
       Source file:   MDK/Device/Source/ARM/STM32F4xx_OTP.s
       Include file:  Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+      Source file:   Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f429xx.s
       Source file:   Drivers/CMSIS/Device/ST/STM32F4xx/Source/Templates/system_stm32f4xx.c
 Target not created.
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:01
 </pre>
 </body>
 </html>

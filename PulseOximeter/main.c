@@ -12,10 +12,16 @@ int main(void)
 	init_ADC();		//config ADC
 	
 	
+	//LED
+	
+	
+	Init_LED();										// Initialise LED
+	Init_Timer2();	
 	while(1)
 	{
 		
 		ADC_DATA=read_adc();			//read value from ADC
+		
 	
 	}
 }

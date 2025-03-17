@@ -59,6 +59,6 @@ void TIM2_IRQHandler(void)			//TIMER 2 INTERRUPT SERVICE ROUTINE
 
 void Toggle_LED1 (void) {
 	
-	GPIOD->ODR^=(1u<<13);
+	GPIOB->ODR^=(1u<<14);
 	 
 }
