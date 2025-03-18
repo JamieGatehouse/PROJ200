@@ -400,6 +400,16 @@
               <FileType>5</FileType>
               <FilePath>.\heartrate.h</FilePath>
             </File>
+            <File>
+              <FileName>readUSART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\readUSART.c</FilePath>
+            </File>
+            <File>
+              <FileName>readUSART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\readUSART.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
