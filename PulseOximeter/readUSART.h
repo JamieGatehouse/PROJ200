@@ -1,18 +1,12 @@
-#ifndef USART_H_
-#define USART_H_
+#ifndef READUSART_H_
+#define READUSART_H_
+
 #include <stm32f4xx.h>
 
-// USART configuration
-#define USART_MODULE    USART3
-#define USART_PORT      GPIOD
-#define USART_TX_pin    8
-#define USART_RX_pin    9
-#define BAUDRATE        115200  // Change to 115200
-
 // Function prototypes
-void init_USART(void);
-void send_usart(unsigned char d);
-unsigned char receive_usart(void);
-uint8_t is_usart_data_available(void);
+void init_USART3(void);  // Initialize USART3
+void send_usart(uint8_t data);  // Send a byte via USART
+uint8_t receive_usart(void);  // Receive a byte via USART
+uint8_t is_usart_data_available(void);  // Check if data is available in USART
 
-#endif /* USART_H_ */
+#endif /* READUSART_H_ */

@@ -2,6 +2,13 @@
 #include "PLL_Config.c"
 #include "heartrate.h"
 #include "readUSART.h"
+#include "buffer.h"
+
+
+// Declare a circular buffer instance
+CircularBuffer oximeter_buffer;
+
+
 
 
 unsigned short ADC_DATA;
@@ -29,29 +36,33 @@ int main(void)
 	}
 	*/
 	
-	//for read USART
-	unsigned char received_data;
-    
-    // Initialize system clock if needed
-    // PLL_Config();
-    // SystemCoreClockUpdate();
-    
-    // Initialize USART
-    init_USART();
-    
-    while(1)
+	
+	  uint8_t received_data;
+
+    // Configure the PLL to run the microcontroller at 180 MHz
+    PLL_Config();
+
+    // Initialize USART3
+    init_USART3();
+
+    // Initialize the buffer
+    init_buffer(&oximeter_buffer);  // Pass the buffer to initialize
+
+    while (1)
     {
-        // Check if data is available
-        if(is_usart_data_available())
+        // Check if data is available in USART
+        if (is_usart_data_available())
         {
-            // Read data from USART
+            // Read the received data from USART
             received_data = receive_usart();
-            
-            // Echo the received character back to PuTTY
+
+            // Write the received data to the buffer
+            write_to_buffer(&oximeter_buffer, received_data);
+
+            // Optionally, echo the received data back to the sender
             send_usart(received_data);
-            
-            // You can add your processing logic here
-            // For example, perform actions based on received commands
         }
+    
     }
+	
 }
