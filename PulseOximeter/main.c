@@ -14,27 +14,27 @@ CircularBuffer oximeter_buffer;
 unsigned short ADC_DATA;
 int main(void)
 {
-	/*
+	
 	//for heartrate
 	//PLL_Config();
 	SystemCoreClockUpdate();
 	
 	init_ADC();		//config ADC
-	
+	Init_Timer3();	
 	
 	//LED
 	
 	
 	Init_LED();										// Initialise LED
 	Init_Timer2();	
-	while(1)
-	{
+	//while(1)
+	//{
 		
-		ADC_DATA=read_adc();			//read value from ADC
+	//	ADC_DATA=read_adc();			//read value from ADC
 		
 	
-	}
-	*/
+	//}
+	
 	
 	
 	  uint8_t received_data;

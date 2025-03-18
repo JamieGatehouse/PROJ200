@@ -10,7 +10,7 @@
 void Control_LEDs(uint16_t ldr_value); 
 void init_ADC(void);
 unsigned short read_adc(void);
-
+void Init_Timer3(void);
 
 
 //LED

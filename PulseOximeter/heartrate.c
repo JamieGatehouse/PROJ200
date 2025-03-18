@@ -25,16 +25,34 @@ unsigned short read_adc(void)
 }
 
 
-void Control_LEDs(uint16_t ldr_value)
-	{
+
+void Init_Timer3(void) {
     
-    // Turn on LED if ADC value is above a threshold (e.g., 2048 for 12-bit ADC)
-   
-    if (ldr_value > 2048) GPIOC->ODR^=(1u<<TRAF_YEL1_PIN);  // Turn on TRAF_YEL1 (PC3)
-    else GPIOC->ODR&=~(1u<<TRAF_YEL1_PIN);                                 // Turn off TRAF_YEL1
-              
-}
+  RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;  // Enable Timer 3 clock
+
+    TIM3->PSC = 200-1;  
+    TIM3->ARR = 900-1; 
+    // 180Mhz/(200+1)*(900+1) ~ 1kHz sampling rate
+    TIM3->DIER |= TIM_DIER_UIE; // Enable update interrupt
+    TIM3->CR1 |= TIM_CR1_CEN;   // Enable timer
+
+    NVIC_EnableIRQ(TIM3_IRQn);  // Enable TIM3 interrupt in NVIC
 	
+}
+
+void TIM3_IRQHandler(void)
+{
+	 if (TIM3->SR & TIM_SR_UIF) {  // Check for update interrupt flag
+        TIM3->SR &= ~TIM_SR_UIF;  // Clear interrupt flag
+		   
+    		//ADC DATA 
+    }
+
+}
+
+
+
+
 
 
 //LED
@@ -64,7 +82,7 @@ void Init_Timer2(void)
 	TIM2->DIER|=TIM_DIER_UIE;						//timer uptdate interrupt enabled
 																			//APB clock is Fcy/2 = 180MHz/2 = 90MHz
 	TIM2->PSC=256-1;										//divide APB clock by 256 = 90MHz/256 = 351kHz
-	TIM2->ARR=3515;										//counter reload value, gives a timer period of 100ms when F_APB = 90MHz and PSC = 256
+	TIM2->ARR=6515;										//counter reload value, gives a timer period of 100ms when F_APB = 90MHz and PSC = 256
 	TIM2->CNT=0;												//zero timer counter
 	NVIC->ISER[0]|=(1u<<28);						//timer 2 global interrupt enabled
 	TIM2->CR1|=TIM_CR1_CEN;							//start timer counter
