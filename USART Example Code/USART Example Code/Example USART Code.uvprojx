@@ -404,6 +404,26 @@
               <FileType>5</FileType>
               <FilePath>.\adc.h</FilePath>
             </File>
+            <File>
+              <FileName>led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\led.c</FilePath>
+            </File>
+            <File>
+              <FileName>led.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\led.h</FilePath>
+            </File>
+            <File>
+              <FileName>heartrate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\heartrate.c</FilePath>
+            </File>
+            <File>
+              <FileName>heartrate.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\heartrate.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

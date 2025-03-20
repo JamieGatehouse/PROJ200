@@ -1,101 +1,58 @@
-#include <stm32f4xx.h>
-#include "PLL_Config.c"
-#include "heartrate.h"
 #include "readUSART.h"
-#include "buffer.h"
 #include "adc.h"
-#include "led.h"
+#include <stdio.h>  // Include for snprintf to format strings
 
+volatile unsigned short adc_value = 0;  // To store the ADC value from the interrupt
+volatile uint8_t adc_ready = 0;         // Flag to indicate when ADC value is ready
+volatile uint8_t new_adc_sample = 0;  // Flag to indicate new ADC data available
 
+#define SAMPLE_RATE 1000  // 1 kHz sampling
+#define BUFFER_SIZE 100   // Store last 100 samples
 
-// Declare a circular buffer instance
-CircularBuffer oximeter_buffer;
-
-//Sampling threshold:
-#define SAMPLE_RATE 1000       // 1 kHz sampling rate
-#define PEAK_THRESHOLD 2000    // Adjust based on ADC values (0-4095)
-#define MIN_PEAK_INTERVAL 300  // Minimum time between peaks (300 ms = 200 BPM max)
-
-volatile uint16_t adc_value = 0;
-volatile uint16_t prev_adc_value = 0;
+volatile uint16_t adc_buffer[BUFFER_SIZE];
+volatile uint8_t buffer_index = 0;
 volatile uint32_t last_peak_time = 0;
-volatile uint32_t current_time = 0;
-volatile uint8_t peak_detected = 0;
-volatile uint16_t heart_rate = 0;  // BPM
+volatile uint16_t heart_rate = 0;
+volatile uint32_t ms_counter = 0; // Global counter that increments every 1ms
 
 
+void TIM3_IRQHandler(void) {
+    if (TIM3->SR & TIM_SR_UIF) {
+        TIM3->SR &= ~TIM_SR_UIF;  // Clear interrupt flag
+        ms_counter++;  // Increment global millisecond counter
+
+        new_adc_sample = 1;  // Set flag to process ADC data in the main loop
+    }
+}
 
 int main(void)
 {
-	
-	 // Configure the PLL to run the microcontroller at 180 MHz
-	 PLL_Config();
-	 SystemCoreClockUpdate();
-	
-	 //config ADC
-	 init_ADC();		         
-	 Init_Timer3();	
-	
-	
-	
-	 // Initialise LED
-   Init_LED();								
-	 Init_Timer2();	
-	
-	
-	
-	
-	  uint8_t received_data;
-
-    // Initialize USART3
-    init_USART3();
-
-    // Initialize the buffer
-    init_buffer(&oximeter_buffer);  // Pass the buffer to initialize
+    init_USART();  // Initialize USART
+    init_ADC();    // Initialize ADC
+    Init_Timer3(); // Initialize Timer 3
+    
+    char adc_str[16];  // To hold the string representation of the ADC value
 
     while (1)
     {
-        // Check if data is available in USART
-        if (is_usart_data_available())
+        // Check if the ADC value is ready to be processed
+        if (adc_ready)
         {
-            // Read the received data from USART
-            received_data = receive_usart();
+            // Prepare the ADC value string to send over USART
+            snprintf(adc_str, sizeof(adc_str), "ADC Value: %u\r\n", adc_value);  // Format ADC value
 
-            // Write the received data to the buffer
-            write_to_buffer(&oximeter_buffer, received_data);
-
-            // Optionally, echo the received data back to the sender
-            send_usart(received_data);
-        }
-    
-    }
-	
-}
-
-
-
-void TIM3_IRQHandler(void)
-{
-	 if (TIM3->SR & TIM_SR_UIF) {  // Check for update interrupt flag
-        TIM3->SR &= ~TIM_SR_UIF;  // Clear interrupt flag
-		    
-		    adc_value = read_adc();
-		    current_time++;           // Increment time (1 ms per step)
-
-        // Detect rising edge (heartbeat peak)
-        if (adc_value > PEAK_THRESHOLD && prev_adc_value <= PEAK_THRESHOLD) {
-            if (current_time - last_peak_time > MIN_PEAK_INTERVAL) {
-                // Calculate BPM
-                heart_rate = 60000 / (current_time - last_peak_time);
-                last_peak_time = current_time;
-                peak_detected = 1;
-							  Toggle_LED2();       // HEARTRATE led
-							  
+            // Send the formatted string over USART
+            for (int i = 0; adc_str[i] != '\0'; i++) {
+                send_usart(adc_str[i]);  // Send each character over USART
             }
-        }
-				 prev_adc_value = adc_value; // Update previous ADC value
-    }
 
+            adc_ready = 0;  // Reset the flag after processing
+        }
+
+        // The main loop can do other tasks or simply wait for the interrupt to update the ADC value
+        __NOP();  // No Operation (for the main loop, the work is handled by the interrupt)
+    }
 }
+
 
 

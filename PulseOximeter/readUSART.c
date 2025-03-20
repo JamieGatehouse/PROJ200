@@ -1,43 +1,42 @@
 #include "readUSART.h"
 
-#define BAUDRATE 230400
-
-void init_USART3(void)
+void send_usart(unsigned char d)
 {
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIODEN;  // Enable GPIO port D clock
-    RCC->APB1ENR |= RCC_APB1ENR_USART3EN; // Enable USART3 clock
-
-    // Configure USART3 pins (PD8 -> TX, PD9 -> RX)
-    GPIOD->MODER &= ~(0x03 << (2 * 8));  // Clear PD8 (TX) mode
-    GPIOD->MODER |= (0x02 << (2 * 8));   // Set PD8 (TX) to alternate function
-    GPIOD->MODER &= ~(0x03 << (2 * 9));  // Clear PD9 (RX) mode
-    GPIOD->MODER |= (0x02 << (2 * 9));   // Set PD9 (RX) to alternate function
-
-    // Set USART3 alternate function (AF7)
-    GPIOD->AFR[1] |= (0x07 << (4 * (8 - 8)));  // Set AF7 (USART3) for PD8 (TX)
-    GPIOD->AFR[1] |= (0x07 << (4 * (9 - 8)));  // Set AF7 (USART3) for PD9 (RX)
-
-    // Configure USART3 parameters
-    USART3->BRR = SystemCoreClock / BAUDRATE;  // Set baud rate (based on PLL)
-    USART3->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_UE; // Enable TX, RX, and USART
-
-    // Enable USART3 interrupt (optional, if you need interrupt-based reception)
-    USART3->CR1 |= USART_CR1_RXNEIE; // Enable RXNE interrupt for USART3
+	while(!(USART_MODULE->SR & USART_SR_TC));
+	USART_MODULE->DR=d;												//write byte to usart data register
 }
 
-void send_usart(uint8_t data)
+void init_USART(void)
 {
-    while (!(USART3->SR & USART_SR_TXE));  // Wait for TX buffer to be empty
-    USART3->DR = data;  // Send the data byte
-}
+	unsigned char i1,i2;
+		RCC->AHB1ENR|=RCC_AHB1ENR_GPIODEN;		//usart port clock enable
+	
+	USART_PORT->MODER&=~(										//clear pin function bits
+		(3u<<(2*USART_TX_pin))
+		|(3u<<(2*USART_RX_pin))
+			);
+	USART_PORT->MODER|=(										//reset pin function bits (alternate function)
+		(2u<<(2*USART_TX_pin))
+		|(2u<<(2*USART_RX_pin))
+			);
+	
+	i1=USART_TX_pin/8;											// used to select AFR[reg] for TX_pin ... pins 0-7 AFR[0] pins 8-15 AFR[1]
+	i2=USART_RX_pin>>3;											// same as above for RX_pin (uses shift to divide)
 
-uint8_t receive_usart(void)
-{
-    while (!(USART3->SR & USART_SR_RXNE));  // Wait until data is received
-    return (uint8_t)USART3->DR;  // Return received data
-}
-
-uint8_t is_usart_data_available(void)
-{
-    return (USART3->SR & USART_SR_RXNE) != 0;  // Check if RXNE flag is set
+		// ALTERNATE FUNCTION SELECT BITS
+	USART_PORT->AFR[i1]&=~(0x0f<<(4*(USART_TX_pin-(i1*8))));    //clear pin function
+	USART_PORT->AFR[i1]|=(0x07<<(4*(USART_TX_pin-(i1*8))));			// set usart as alternate function for TX_pin
+	USART_PORT->AFR[i2]&=~(0x0f<<(4*(USART_RX_pin-(i2*8))));		// clear pin function
+	USART_PORT->AFR[i2]|=(0x07<<(4*(USART_RX_pin-(i2*8))));			//set usart as alternate function for RX_pin
+	
+	RCC->APB1ENR|=RCC_APB1ENR_USART3EN;			//usart clock enable
+	USART_MODULE->CR1|=(										//USART CONFIG
+			USART_CR1_TE												//transmit enable
+			|USART_CR1_RE												//receive enable
+			|USART_CR1_UE												//usart main enable bit
+				);
+	USART_MODULE->BRR=SystemCoreClock/(BAUDRATE);		//set baud rate
+																									//this is not an accurate way to set the baudrate
+																									//and only works for 16Mhz system clock.
+																									
 }

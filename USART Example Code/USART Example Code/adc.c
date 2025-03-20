@@ -2,15 +2,21 @@
 
 void init_ADC(void)
 {
-	RCC->AHB1ENR|=RCC_AHB1ENR_GPIOCEN;	//GPIOC clock enable
-	
-	ADC_input_port->MODER|=(3u<<(2*ADC_input_pin));	//ADC input pin is analogue mode
-	
-	RCC->APB2ENR|=RCC_APB2ENR_ADC1EN;		//ADC clock enable
-	ADC1->SQR1&=~ADC_SQR1_L;						//set number of conversions per sequence to 1
-	ADC1->SQR3&=~ADC_SQR3_SQ1;					//clear channel select bits
-	ADC1->SQR3|=ADC_Channel;						//set channel 13 for PC3
-	ADC1->CR2|=ADC_CR2_ADON;						//enable ADC
+	 RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;  // Enable GPIOC clock (for PC3)
+    
+    // Set PC3 to analog mode for ADC
+    ADC_input_port->MODER |= (3u << (2 * ADC_input_pin));  // Analog mode for PC3
+
+    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;  // Enable ADC1 clock
+    
+
+    // Set the ADC conversion sequence to use Channel 13
+    ADC1->SQR1 &= ~ADC_SQR1_L;          // 1 conversion in sequence
+    ADC1->SQR3 &= ~ADC_SQR3_SQ1;        // Clear channel select bits
+    ADC1->SQR3 |= ADC_Channel;          // Set Channel 13 (PC3)
+    
+    // Enable ADC
+    ADC1->CR2 |= ADC_CR2_ADON;          // Enable ADC
 	
 }
 
