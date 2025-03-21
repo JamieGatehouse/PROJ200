@@ -31,15 +31,10 @@ unsigned short read_adc(void)
 
 
 void Init_Timer3(void) {
-    
-  RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;  // Enable Timer 3 clock
-
-    TIM3->PSC = 200-1;  
-    TIM3->ARR = 900-1; 
-    // 180Mhz/(200+1)*(900+1) ~ 1kHz sampling rate
-    TIM3->DIER |= TIM_DIER_UIE; // Enable update interrupt
-    TIM3->CR1 |= TIM_CR1_CEN;   // Enable timer
-
-    NVIC_EnableIRQ(TIM3_IRQn);  // Enable TIM3 interrupt in NVIC
-	
+    RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;  // Enable Timer 3 clock
+    TIM3->PSC = (SystemCoreClock / 1000000) - 1;  // Prescale to 1 MHz (1 µs steps)
+    TIM3->ARR = 999;  // 1000 µs = 1 ms (1 kHz)
+    TIM3->DIER |= TIM_DIER_UIE;  // Enable update interrupt
+    TIM3->CR1 |= TIM_CR1_CEN;    // Start timer
+    NVIC_EnableIRQ(TIM3_IRQn);   // Enable Timer 3 IRQ
 }

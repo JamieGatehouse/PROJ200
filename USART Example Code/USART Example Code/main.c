@@ -23,7 +23,9 @@ volatile uint16_t prev_adc_value = 0;
 volatile uint32_t last_peak_time = 0;
 volatile uint16_t heart_rate = 0;  // BPM
 
-
+#define AVERAGE_WINDOW 4  // Smooth BPM over 4 beats
+volatile uint16_t bpm_buffer[AVERAGE_WINDOW] = {0};
+volatile uint8_t bpm_index = 0;
 
 
 
@@ -43,26 +45,27 @@ void TIM3_IRQHandler(void) {
 
 // === Heart Rate Processing Function ===
 void process_heart_rate(void) {
-    if (new_adc_sample) {  // Check if new ADC sample is available
-        new_adc_sample = 0;  // Reset flag
+    if (new_adc_sample) {
+        new_adc_sample = 0;
+        adc_value = read_adc();
 
-        adc_value = read_adc();  // Read ADC from photodiode
-        
-        // Detect heartbeat peak (rising edge detection)
         if (adc_value > PEAK_THRESHOLD && prev_adc_value <= PEAK_THRESHOLD) {
-            Toggle_LED2();  // Flash LED on heartbeat
-					
-				  
-            
+            Toggle_LED2();  
+
             if (ms_counter - last_peak_time > MIN_PEAK_INTERVAL) {
-                // Calculate BPM
-                heart_rate = 60000 / (ms_counter - last_peak_time);
+                uint16_t new_bpm = 60000 / (ms_counter - last_peak_time);
                 last_peak_time = ms_counter;
+
+                bpm_buffer[bpm_index++] = new_bpm;
+                if (bpm_index >= AVERAGE_WINDOW) bpm_index = 0;
+
+                // Compute average BPM
+                uint16_t sum = 0;
+                for (uint8_t i = 0; i < AVERAGE_WINDOW; i++) sum += bpm_buffer[i];
+                heart_rate = sum / AVERAGE_WINDOW;
             }
-					
         }
-        
-        prev_adc_value = adc_value; // Update last ADC value
+        prev_adc_value = adc_value;
     }
 }
 
