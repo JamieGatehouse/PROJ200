@@ -38,5 +38,6 @@ void init_USART(void)
 	USART_MODULE->BRR=SystemCoreClock/(BAUDRATE);		//set baud rate
 																									//this is not an accurate way to set the baudrate
 																									//and only works for 16Mhz system clock.
-																									
+   
+																		  							
 }

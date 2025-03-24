@@ -19,7 +19,7 @@ volatile uint16_t prev_adc_value = 0;
 volatile uint32_t last_peak_time = 0;
 volatile uint16_t heart_rate = 0;  // BPM
 
-#define AVERAGE_WINDOW 4  // Smooth BPM over 4 beats
+#define AVERAGE_WINDOW 10  // Smooth BPM over 4 beats
 volatile uint16_t bpm_buffer[AVERAGE_WINDOW] = {0};
 volatile uint8_t bpm_index = 0;
 
@@ -75,13 +75,13 @@ int main(void)
     // Track when we last updated the LCD
     uint32_t last_lcd_update = 0;
     
-    char bpm_str[16];  // To hold the string representation of the ADC value
+    char bpm_str[32];  // To hold the string representation of the ADC value
     while (1)
     {
         process_heart_rate();  // Handle ADC reading & BPM calculation
         
         // Send BPM over USART
-        snprintf(bpm_str, sizeof(bpm_str), "BPM: %u\r\n", heart_rate);
+        snprintf(bpm_str, sizeof(bpm_str), "ADC data: %u\r\n", adc_value);
         for (int i = 0; bpm_str[i] != '\0'; i++) {
             send_usart(bpm_str[i]);  // Send each character over USART
         }

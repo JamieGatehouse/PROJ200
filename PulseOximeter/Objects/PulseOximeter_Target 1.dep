@@ -1,15 +1,15 @@
 Dependencies for Project 'PulseOximeter', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 6220000::V6.22::ARMCLANG
-F (.\main.c)(0x67DC30C9)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/_Target_1-IC:/Users/sampa/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/sampa/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="541" -DSTM32F429xx -D_RTE_-o ./objects/main.o -MMD)
-F (.\heartrate.c)(0x67DC1C95)()
-F (.\heartrate.h)(0x67DC1C95)()
-F (.\readUSART.c)(0x67DC273B)()
-F (.\readUSART.h)(0x67DC2662)()
-F (.\buffer.c)(0x67DC1C95)()
-F (.\buffer.h)(0x67DC1C95)()
-F (.\adc.c)(0x67DC2439)()
-F (.\adc.h)(0x67DC2235)()
-F (.\led.c)(0x67DC1C95)()
-F (.\led.h)(0x67DC1C95)()
-F (RTE/Device/STM32F429ZITx/startup_stm32f429xx.s)(0x67DC1C95)()
-F (RTE/Device/STM32F429ZITx/system_stm32f4xx.c)(0x67DC1C95)()
+F (.\main.c)(0x67E121C9)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-D__EVAL -gdwarf-4 -O0 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier-I./RTE/_Target_1-IC:/Users/sampa/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/sampa/AppData/Local/Arm/Packs/Keil/STM32F4xx_DFP/2.17.1/Drivers/CMSIS/Device/ST/STM32F4xx/Include-D__UVISION_VERSION="541" -DSTM32F429xx -D_RTE_-o ./objects/main.o -MMD)
+F (.\heartrate.c)(0x67E1218B)()
+F (.\heartrate.h)(0x67E1218B)()
+F (.\readUSART.c)(0x67E1218B)()
+F (.\readUSART.h)(0x67E1218B)()
+F (.\buffer.c)(0x67E1218B)()
+F (.\buffer.h)(0x67E1218B)()
+F (.\adc.c)(0x67E1218B)()
+F (.\adc.h)(0x67E1218B)()
+F (.\led.c)(0x67E1218B)()
+F (.\led.h)(0x67E1218B)()
+F (RTE/Device/STM32F429ZITx/startup_stm32f429xx.s)(0x67E1218B)()
+F (RTE/Device/STM32F429ZITx/system_stm32f4xx.c)(0x67E1218B)()
